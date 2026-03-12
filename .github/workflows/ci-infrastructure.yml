@@ -119,6 +119,15 @@ jobs:
     #   working-directory: ${{ env.WORKING_DIR }}
 
     - name: install gitleaks
+      run: |
+       GITLEAKS_VERSION=8.24.2
+       wget -qO gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz
+       tar -xzf gitleaks.tar.gz
+       chmod +x gitleaks
+       sudo mv gitleaks /usr/local/bin/gitleaks
+       gitleaks version
+
+    - name: run gitleaks
       run: cd "${{ env.WORKING_DIR }}" && gitleaks git --redact --verbose --exit-code 1
      
     #   run: |
