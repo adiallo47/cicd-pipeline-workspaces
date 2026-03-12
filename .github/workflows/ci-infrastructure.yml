@@ -67,7 +67,7 @@ jobs:
       with:
           repository: ${{ env.REPOSITORY }}
           path: ${{ env.WORKING_DIR }}
-          token : ${{ secrets.TF_INFRA_TOKEN }}
+          token : ${{ secrets.TF_INFRA }}
     
     - name: setup terraform    
       uses: hashicorp/setup-terraform@v3
