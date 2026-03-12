@@ -25,7 +25,7 @@ permissions:
 env:
   TF_VERSION: "1.7.0"
   REPOSITORY: "adiallo47/terraform-infra-workspaces"
-  WORKING_DIR: "terraform-infrastructure"
+  WORKING_DIR: "../terraform-infrastructure"
   ENVIRONMENT: "staging"
   TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
   TF_LINT: "terraform-linters/tflint-action@v1.0.0"
