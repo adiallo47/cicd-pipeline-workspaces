@@ -21,7 +21,7 @@ on:
 
 env:
   TF_VERSION: "1.7.0"
-  REPOSITORY: "adiallo/terraform-infrastructure"
+  REPOSITORY: "adiallo/terraform-infra-workspaces"
   WORKING_DIR: "terraform-infrastructure"
   ENVIRONMENT: "staging"
 
