@@ -24,6 +24,7 @@ env:
   REPOSITORY: "adiallo47/terraform-infra-workspaces"
   WORKING_DIR: "terraform-infrastructure"
   ENVIRONMENT: "staging"
+  TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
 
 concurrency:
   group: ci-terraform-${{ github.ref }}
@@ -81,6 +82,8 @@ jobs:
     - name: terraform validate
       run: terraform validate
       working-directory: ${{ env.WORKING_DIR }}
+      env:
+        TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
 
 # ── 3. SECURITY ──────────────────────────────────────────      
   security: 
