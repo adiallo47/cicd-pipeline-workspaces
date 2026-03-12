@@ -99,12 +99,13 @@ jobs:
       with: 
         fetch-depth: 0
         repository: ${{ env.REPOSITORY }}
-        token : ${{ secrets.GITHUB_TOKEN }}
+        path: ${{env.WORKING_DIR}}
+        token: ${{ secrets.GITHUB_TOKEN }}
        
     - name: run tfsec
-      uses: aquasecurity/tfsec-action@v1.0.0
+      uses: aquasecurity/trivy-action@v0.33.1
       with:
-        working_directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}
         soft_fail: false
 
     - name: setup tflint
