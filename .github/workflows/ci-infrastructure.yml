@@ -117,5 +117,9 @@ jobs:
         working_directory: ${{ env.WORKING_DIR }}
         soft_fail: false 
 
-    - name: run secret scan #gitleaks
-      uses: gitleaks/gitleaks-action@v2
+    - name: install gitleaks
+      run: |
+       curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/install.sh | sh -s -- -b /usr/local/bin
+  
+    - name: Run Gitleaks
+      run: gitleaks dir ${{ env.WORKING_DIR }} --redact --verbose 
