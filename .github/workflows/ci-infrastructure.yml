@@ -97,15 +97,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: run tflint
+    - name: setup tflint
       uses: terraform-linters/tflint/setup-tflint@v6
-      with:
-          repository: ${{ env.REPOSITORY }}
-          path: ${{ env.WORKING_DIR }}
-          token : ${{ secrets.GITHUB_TOKEN }}
-          run: |
-           tflint --init
-           tflint --recursive
+      
+    - name: run tflint
+      run: |
+       tflint --init
+       tflint --recursive
+      working-directory: ${{ env.WORKING_DIR }}
+
 
     - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
