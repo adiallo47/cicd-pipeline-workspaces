@@ -103,7 +103,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
        
     - name: run tfsec
-      uses: aquasecurity/trivy-action@v0.20.0
+      uses: aquasecurity/trivy-action@v0
       with:
         working-directory: ${{ env.WORKING_DIR }}
         soft_fail: false
