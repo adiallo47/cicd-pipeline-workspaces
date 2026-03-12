@@ -23,9 +23,9 @@ on:
       - "!main"                 
 
 env:
-  TF_VERSION:         "1.7.0"
-  WORKING_DIR:        "./terraform-infrastructure"
-  ENVIRONMENT:        "staging"
+  TF_VERSION: "1.7.0"
+  WORKING_DIR: "/terraform-infrastructure"
+  ENVIRONMENT: "staging"
 
 concurrency:
   group: ci-terraform-${{ github.ref }}
