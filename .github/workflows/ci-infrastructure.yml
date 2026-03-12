@@ -99,7 +99,6 @@ jobs:
       with: 
         fetch-depth: 0
         repository: ${{ env.REPOSITORY }}
-        path: ${{ env.WORKING_DIR }}
         token : ${{ secrets.GITHUB_TOKEN }}
        
     - name: run tfsec
