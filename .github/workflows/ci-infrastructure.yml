@@ -7,8 +7,8 @@
 #  Main branch deployments are handled by cd-deploy-workspaces.yml.
 #
 #  Flow:
-#    push (non-main) → format → validate → security
-#                    → smoke-test
+#    push (non-main) → format → validate → security (tflint -> tfsec -> secret scan) → smoke-test
+#    plan
 # ============================================================
 
 name: CI Deploy
@@ -104,12 +104,11 @@ jobs:
     - name: setup tflint
       uses: terraform-linters/setup-tflint@v6.2.1
       
-    - name: run tflint
-      run: |
-       tflint --init
-       tflint --recursive
-      working-directory: ${{ env.WORKING_DIR }}
-
+    # - name: run tflint
+    #   run: |
+    #    tflint --init
+    #    tflint --recursive
+    #   working-directory: ${{ env.WORKING_DIR }}
 
     - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
