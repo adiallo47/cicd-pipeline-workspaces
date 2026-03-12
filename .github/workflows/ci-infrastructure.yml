@@ -96,6 +96,10 @@ jobs:
     needs: [validate]
     steps:
     - uses: actions/checkout@v4
+      with: 
+        repository: ${{ env.REPOSITORY }}
+        path: terraform-infrastructure
+        token: ${{ secrets.TF_INFRA }}
 
     - name: setup tflint
       uses: terraform-linters/setup-tflint@v6.2.1
