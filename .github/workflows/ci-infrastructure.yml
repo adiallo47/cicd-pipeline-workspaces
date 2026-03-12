@@ -100,10 +100,12 @@ jobs:
     - name: run tflint
       uses: terraform-linters/tflint-action@v1.0.0
       with:
-        working_directory: ${{ env.WORKING_DIR }}
-        run: |
-          tflint --init
-          tflint --recursive
+          repository: ${{ env.REPOSITORY }}
+          path: ${{ env.WORKING_DIR }}
+          token : ${{ secrets.GITHUB_TOKEN }}
+          run: |
+           tflint --init
+           tflint --recursive
 
     - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
