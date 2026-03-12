@@ -17,7 +17,10 @@ on:
   push:
     branches:
       - "**"
-      - "!main"                 
+      - "!main"   
+
+permissions:
+   contents: read
 
 env:
   TF_VERSION: "1.7.0"
