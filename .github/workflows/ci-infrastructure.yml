@@ -122,4 +122,4 @@ jobs:
        curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/install.sh | sh -s -- -b /usr/local/bin
   
     - name: Run Gitleaks
-      run: gitleaks dir ${{ env.WORKING_DIR }} --redact --verbose 
+      run: gitleaks dir ${{ env.WORKING_DIR }} --redact --verbose --exit-code 1
