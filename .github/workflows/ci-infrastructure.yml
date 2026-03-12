@@ -7,10 +7,7 @@
 #  Main branch deployments are handled by cd-deploy-workspaces.yml.
 #
 #  Flow:
-#    push (non-main) → validate → lint → security-scan
-#                    → tg-plan-staging
-#                    → tg-apply-staging (auto, no approval)
-#                    → ansible-deploy-staging
+#    push (non-main) → format → validate → security
 #                    → smoke-test
 # ============================================================
 
@@ -24,40 +21,64 @@ on:
 
 env:
   TF_VERSION: "1.7.0"
-  WORKING_DIR: "/Users/amadoudiallo/IdeaProjects/workspace-deployment/terraform-infrastructure"
+  REPOSITORY: "adiallo/terraform-infrastructure"
+  WORKING_DIR: "terraform-infrastructure"
   ENVIRONMENT: "staging"
 
 concurrency:
   group: ci-terraform-${{ github.ref }}
-  cancel-in-progress: true          # cancel older staging deploys on new push
-
+  cancel-in-progress: true
 
 jobs:
-  # ── 1. FORMAT ──────────────────────────────────────────
+
+# ── 1. FORMAT ──────────────────────────────────────────
   format:
     name: "format"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Terraform
+      - name: terraform repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPOSITORY }}
+          path: ${{ env.WORKING_DIR }}
+          token : ${{ secrets.TF_INFRA }}
+
+      - name: setup terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.ENVIRONMENT }}
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: format check
+        run: terraform fmt -check -recurisve
+        working-directory: ${{ env.WORKING_DIR }}
 
 # ── 2. VALIDATE ──────────────────────────────────────────
   validate:
     name: "validate"
     runs-on: ubuntu-latest
+    needs: [format]
     steps:
     - uses: actions/checkout@v4
+
+    - name: terraform repo
+      uses: actions/checkout@v4
+      with:
+          repository: ${{ env.REPOSITORY }}
+          path: ${{ env.WORKING_DIR }}
+          token : ${{ secrets.TF_INFRA_TOKEN }}
     
-    - name: Setup Terraform    
+    - name: setup terraform    
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - name: Terraform Validate
+    - name: terraform init
+      run: terraform init
+      working-directory: ${{ env.WORKING_DIR }}
+
+    - name: terraform validate
       run: terraform validate
       working-directory: ${{ env.WORKING_DIR }}
 
@@ -69,13 +90,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Run tfsec
+    - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
       with:
         working_directory: ${{ env.WORKING_DIR }}
         soft_fail: false 
 
-    - name: Checkov
+    - name: checkov
       uses: bridgecrewio/checkov-action@12
       with:
         working_directory: ${{ env.WORKING_DIR }}
