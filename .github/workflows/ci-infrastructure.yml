@@ -100,7 +100,7 @@ jobs:
         soft_fail: false 
 
     - name: checkov
-      uses: bridgecrewio/checkov-action@12
+      uses: bridgecrewio/checkov-action@latest
       with:
         working_directory: ${{ env.WORKING_DIR }}
         framework: terraform
