@@ -28,6 +28,7 @@ env:
   WORKING_DIR: "terraform-infrastructure"
   ENVIRONMENT: "staging"
   TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
+  TF_LINT: "terraform-linters/tflint-action@v1.0.0"
 
 concurrency:
   group: ci-terraform-${{ github.ref }}
@@ -96,15 +97,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: run tflint
+      uses: terraform-linters/tflint-action@v1.0.0
+      with:
+        working_directory: ${{ env.WORKING_DIR }}
+        run: |
+          tflint --init
+          tflint --recursive
+
     - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
       with:
         working_directory: ${{ env.WORKING_DIR }}
         soft_fail: false 
-
-    - name: checkov
-      uses: bridgecrewio/checkov-action@latest
-      with:
-        working_directory: ${{ env.WORKING_DIR }}
-        framework: terraform
-        soft_fail: false
