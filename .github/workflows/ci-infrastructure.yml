@@ -99,7 +99,7 @@ jobs:
       with: 
         repository: ${{ env.REPOSITORY }}
         path: terraform-infrastructure
-        token: ${{ secrets.TF_INFRA }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: setup tflint
       uses: terraform-linters/setup-tflint@v6.2.1
