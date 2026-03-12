@@ -51,7 +51,7 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: format check
-        run: terraform fmt -check -recurisve
+        run: terraform fmt -check -recursive
         working-directory: ${{ env.WORKING_DIR }}
 
 # ── 2. VALIDATE ──────────────────────────────────────────
