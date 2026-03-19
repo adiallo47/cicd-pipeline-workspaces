@@ -7,7 +7,7 @@
 #  Main branch deployments are handled by cd-deploy-workspaces.yml.
 #
 #  Flow:
-#    push (non-main) → format → validate → security (tflint -> tfsec -> secret scan) → smoke-test
+#    push (non-main) -> format -> validate -> security (tflint -> tfsec -> secret scan) → smoke-test
 #    plan
 # ============================================================
 
@@ -109,15 +109,6 @@ jobs:
         working_directory: ${{ env.WORKING_DIR }}
         soft_fail: false
 
-    - name: setup tflint
-      uses: terraform-linters/setup-tflint@v6.2.1
-      
-    # - name: run tflint
-    #   run: |
-    #    tflint --init
-    #    tflint --recursive
-    #   working-directory: ${{ env.WORKING_DIR }}
-
     - name: install gitleaks
       run: |
        GITLEAKS_VERSION=8.24.2
@@ -129,11 +120,20 @@ jobs:
 
     - name: run gitleaks
       run: cd "${{ env.WORKING_DIR }}" && gitleaks git --redact --verbose --exit-code 1
-     
-    #   run: |
-    #    wget -qO gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_linux_x64.tar.gz
-    #    tar -xzf gitleaks.tar.gz
-    #    sudo mv gitleaks /usr/local/bin/
 
-    # - name: Run Gitleaks
-    #   run: gitleaks dir ${{ env.WORKING_DIR }} --redact --verbose --exit-code 1
+    - name: setup tflint
+      uses: terraform-linters/setup-tflint@v6.2.1
+      
+    - name: run tflint
+      run: |
+       tflint --init
+       tflint --recursive
+      working-directory: ${{ env.WORKING_DIR }}
+
+# ── 4. ARTIFACTS ────────────────────────────────────────── 
+  artifacts:
+    name: "artifacts"
+    runs-on: ubuntu-latest
+    needs: [validate]
+    steps:
+    - uses: actions/checkout@v4
