@@ -27,15 +27,14 @@ env:
   REPOSITORY: "adiallo47/terraform-infra-workspaces"
   WORKING_DIR: "terraform-infrastructure"
   ENVIRONMENT: "staging"
-  TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
+  TF_VAR_PUBLIC_KEY: ${{secrets.EC2_PUBLIC_KEY}}
   TF_LINT: "terraform-linters/tflint-action@v1.0.0"
 
 concurrency:
-  group: ci-terraform-${{ github.ref }}
+  group: ci-terraform-${{github.ref}}
   cancel-in-progress: true
 
 jobs:
-
 # ── 1. FORMAT ──────────────────────────────────────────
   format:
     name: "format"
@@ -46,18 +45,18 @@ jobs:
       - name: terraform repo
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.REPOSITORY }}
-          path: ${{ env.WORKING_DIR }}
-          token : ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{env.REPOSITORY}}
+          path: ${{env.WORKING_DIR}}
+          token : ${{secrets.GITHUB_TOKEN}}
 
       - name: setup terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          terraform_version: ${{env.TF_VERSION}}
 
       - name: format check
         run: terraform fmt -check -recursive
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{env.WORKING_DIR}}
 
 # ── 2. VALIDATE ──────────────────────────────────────────
   validate:
@@ -70,24 +69,24 @@ jobs:
     - name: terraform repo
       uses: actions/checkout@v4
       with:
-          repository: ${{ env.REPOSITORY }}
-          path: ${{ env.WORKING_DIR }}
-          token : ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{env.REPOSITORY}}
+          path: ${{env.WORKING_DIR}}
+          token : ${{secrets.GITHUB_TOKEN}}
     
     - name: setup terraform    
       uses: hashicorp/setup-terraform@v3
       with:
-        terraform_version: ${{ env.TF_VERSION }}
+        terraform_version: ${{env.TF_VERSION}}
 
     - name: terraform init
       run: terraform init
-      working-directory: ${{ env.WORKING_DIR }}
+      working-directory: ${{env.WORKING_DIR}}
 
     - name: terraform validate
       run: terraform validate
-      working-directory: ${{ env.WORKING_DIR }}
+      working-directory: ${{env.WORKING_DIR}}
       env:
-        TF_VAR_PUBLIC_KEY: ${{ secrets.EC2_PUBLIC_KEY }}
+        TF_VAR_PUBLIC_KEY: ${{secrets.EC2_PUBLIC_KEY}}
 
 # ── 3. SECURITY ──────────────────────────────────────────      
   security: 
@@ -99,14 +98,14 @@ jobs:
     - uses: actions/checkout@v4
       with: 
         fetch-depth: 0
-        repository: ${{ env.REPOSITORY }}
+        repository: ${{env.REPOSITORY}}
         path: ${{env.WORKING_DIR}}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{secrets.GITHUB_TOKEN}}
        
     - name: run tfsec
       uses: aquasecurity/tfsec-action@v1.0.0
       with:
-        working_directory: ${{ env.WORKING_DIR }}
+        working_directory: ${{env.WORKING_DIR}}
         soft_fail: false
 
     - name: install gitleaks
@@ -128,7 +127,7 @@ jobs:
       run: |
        tflint --init
        tflint --recursive
-      working-directory: ${{ env.WORKING_DIR }}
+      working-directory: ${{env.WORKING_DIR}}
 
 # ── 4. ARTIFACTS ────────────────────────────────────────── 
   artifacts:
